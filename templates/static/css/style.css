@@ -1,0 +1,26 @@
+.flex{
+    display: flex;
+    flex-wrap: wrap;
+    padding: 10px;
+    margin: 10px;
+    justify-content: center;
+  
+}
+
+.flex_palestrantes{
+    padding: 10px;
+   
+   
+}
+
+body{
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: auto;
+    
+    
+}
+
+.espaco{
+    padding: 50px;
+}

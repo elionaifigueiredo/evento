@@ -1,0 +1,33 @@
+/* quando a tela chegar no maximo de 700px a regra será utilizada */
+@media (max-width: 600px) {
+    header {
+        display: flex;
+        flex-direction: column;
+
+    }  
+
+    section{
+        display: flex;
+        flex-direction: column;
+    }
+
+    .lead {
+        display: flex;
+        flex-direction: column;
+    }
+
+   .modal fade{
+    display: flex;
+    flex-direction: column;
+   }
+
+    img{
+      
+        width: 100%;
+    }
+
+   h1{
+    text-align: center;
+
+   }
+}

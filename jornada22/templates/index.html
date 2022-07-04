@@ -1,0 +1,188 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block 'head' %}
+<script>
+  $('#myModal').on('shown.bs.modal', function () {
+  $('#myInput').trigger('focus')
+})
+</script>
+{% endblock %}
+{% block 'titulo' %} 
+{%endblock%}
+{%block 'body' %}  
+
+    {% if messages %} 
+    {% for message in messages %}
+        <div class="alert {{message.tags}} text-center">{{message}}</div>
+    {% endfor %} 
+    {% endif %}  
+
+  <!-- SOBRE O EVENTO  -->
+  <div class="container text-center">
+    <div class="jumbotron">
+      {% for evento in evento %}
+        <h1 class="display-4">{{evento.nome}}</h1>
+        <br>
+        <h4 class="text-black">Data: {{evento.data}}</h4>
+        <h4 class="text-black">Local: {{evento.local}}</h4>   
+        
+        <hr class="my-4">
+            <a href="{% url 'generate-pdf' %}" target="_blank" class="btn btn-sm btn-success">Generate Pdf</a>
+
+            <!-- BOTOES DE ACESSO  -->
+            <p class="lead" >
+              <a class="btn btn-primary btn-lg" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo" role="button">FAÇA SUA INSCRIÇÃO</a>
+              <a class="btn btn-primary btn-lg" data-toggle="modal" data-target="#modalExemplo" role="button">OUTROS</a>
+              <a class="btn btn-primary btn-lg" data-toggle="modal" data-target="#ExemploModalCentralizado" role="button">VIDEOCONFERÊNCIA</a>
+            </p>
+
+          <!-- BANNER  -->
+            {% for banner in banner %}
+              <img src="{{banner.img.url}}" class="rounded float-center" alt="...">
+              {%endfor%}
+              <!-- <div class="espaco"></div> -->
+              <br>
+              <br>
+              <hr class="my-4">
+              <div style="text-align: left; color:black;">
+                <h1>Palestrante:</h1>
+              </div>
+              <hr class="my-4">
+            {% endfor %}
+        </div>
+
+    <!-- SLIDE DOS PALESTRANTES  -->
+    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" style="background: #f7f7f7; padding: 10px">
+            <div class="carousel-inner">
+                  {% for obj in palestrantes %}
+                  <!-- adiciona as img horizontal -->
+                  {% if forloop.first %}  <!-- Begin Loop -->
+                  <div class="carousel-item active">
+                    {% else %}
+                    <div class="carousel-item">
+                      {% endif %}
+                      <br>
+                      <p style="color: blue;">{{obj.nome}}</p>
+                      <p style="color: black;">{{obj.descricao}}</p>
+                      <img  class=" mx-auto d-block " height="350px" src="{{ obj.img.url}}" alt="{{obj.nome}}">
+
+                      <p><a class="btn btn-lg btn-primary" href="#" role="button">Palestra</a></p>
+                    </div>
+
+
+                  {% endfor %} <!-- ENd Loop -->
+                  </div>
+
+
+                    <a style="color: black;" class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                      <span class="carousel-control-prev-icon" aria-hidden="true" style="color: black;"></span>
+                      <span class="sr-only" style="color: black;">Anterior</span>
+                    </a>
+                    <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                      <span class="sr-only" style="color: black;">Próximo</span>
+                    </a>
+            </div>
+    </div>
+    <!-- fim carousel  -->
+  </div>
+
+    <!-- INICIO - FORMULARIO DE INSCRIÇÃO  -->
+    <!-- Modal INSCRIÇÃO  -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">FAÇA SUA INSCRIÇÃO</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form action="{% url 'add_inscrito' %}" method="POST" data-toggle="validator">{% csrf_token %}
+              <div class="form-group">
+                <label for="nome" class="col-form-label">Nome:</label>
+                <input type="text" class="form-control" id="nome" name="nome"  required>
+              </div>
+              <div class="form-group">
+                <label for="email" class="col-form-label">Email:</label>
+                <input type="email"  class="form-control" id="email" name="email"  required>
+              </div>
+              <div class="form-group">
+                <label for="cpf" class="col-form-label">CPF:</label>
+                <input type="text"  class="form-control" id="cpf" name="cpf" placeholder="Digite seu CPF" required>
+              </div>
+              <button type="submit" class="btn btn-primary">Enviar</button>
+            </form>
+          </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal PROGRAMAÇÃO-->
+      <div class="modal fade" id="modalExemplo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              {% for evento in evento %}
+              <h5 class="modal-title" id="exampleModalLabel">{{evento.nome}}</h5>
+              {% endfor %}
+              <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+            {% for programacao in programacao %}
+              <ul>
+                <li style="color: blueviolet;">Palestra: {{programacao.nome}} </li>
+                <li>Início: {{programacao.inicio}}</li>
+                <li>Término: {{programacao.fim}}</li>
+                <hr>
+              </ul>
+            {% endfor %}
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        <!-- Modal VIDEOCONFERENCIA -->
+        <div class="modal fade" id="ExemploModalCentralizado" tabindex="-1" role="dialog" aria-labelledby="TituloModalCentralizado" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="TituloModalCentralizado">LINK DA VIDEOCONFERENCIA</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+               <a href="#">link</a>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+       
+      <!-- FIM - FORMULARIO DE INSCRIÇÃO  -->      
+      <br>
+  <!-- FOOTER ORGANIZADOR -->
+  <footer class="bg-light text-center text-lg-start">
+    <!-- Copyright -->
+    {% for org in organizador %}
+    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+      <img src="{{org.img.url}}" height="25px" class="w-10" alt="dom">
+         {{org.sobrenome}} © 2022 Copyright:
+      <a class="text-dark" href="https://mdbootstrap.com/">MDBootstrap.com</a>
+    </div>
+    <!-- Copyright -->
+   {% endfor %}
+  </footer>
+{% endblock %}
